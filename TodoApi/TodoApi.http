@@ -1,0 +1,36 @@
+﻿@TodoApi_HostAddress = https://localhost:7235
+
+GET {{TodoApi_HostAddress}}/todoitems
+
+###
+
+GET {{TodoApi_HostAddress}}/todoitems/{id}
+
+###
+
+POST {{TodoApi_HostAddress}}/todoitems
+Content-Type: application/json
+
+{
+  "name":"creating my first minimal api project",
+  "isComplete":true
+}
+###
+
+
+PUT {{TodoApi_HostAddress}}/todoitems/1
+Content-Type: application/json
+
+{
+  "name":"feed fish",
+  "isComplete": false
+}
+###
+
+DELETE {{TodoApi_HostAddress}}/todoitems/1
+
+###
+
+GET {{TodoApi_HostAddress}}/todoitems/complete
+
+###

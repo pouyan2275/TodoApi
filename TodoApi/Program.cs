@@ -12,7 +12,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
 
-app.MapGet("/todoitems", async (TodoDb db) => await db.Todos.ToListAsync());
+app.MapGet("/todoitems", async (TodoDb db) => await db.Todos.ToArrayAsync());
 
 app.MapGet("/todoitems/complete", async (TodoDb db) => await db.Todos.Where(x => x.IsComplete).ToArrayAsync());
 
