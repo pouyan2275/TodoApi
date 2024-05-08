@@ -11,25 +11,26 @@ builder.Services.AddDbContext<TodoDb>(opt =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
+var todoitems = app.MapGroup("/todoitems");
 
-app.MapGet("/todoitems", async (TodoDb db) => await db.Todos.ToArrayAsync());
+todoitems.MapGet("/", async (TodoDb db) => await db.Todos.ToArrayAsync());
 
-app.MapGet("/todoitems/complete", async (TodoDb db) => await db.Todos.Where(x => x.IsComplete).ToArrayAsync());
+todoitems.MapGet("/complete", async (TodoDb db) => await db.Todos.Where(x => x.IsComplete).ToArrayAsync());
 
-app.MapGet("/todoitems/{id}", async (int id, TodoDb db) =>
+todoitems.MapGet("/{id}", async (int id, TodoDb db) =>
     await db.Todos.FindAsync(id)
     is Todo todo ? Results.Ok(todo) : Results.NotFound()
     );
 
-app.MapPost("/todoitems",async (Todo todo, TodoDb db) =>
+todoitems.MapPost("/",async (Todo todo, TodoDb db) =>
 {
     await db.Todos.AddAsync(todo);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/todoitems/{todo.Id}",todo);
+    return Results.Created($"/{todo.Id}",todo);
 } );
 
-app.MapPut("/todoitems/{id}",async (int id,Todo inputTodo,TodoDb db)=>{
+todoitems.MapPut("/{id}",async (int id,Todo inputTodo,TodoDb db)=>{
     var todo = await db.Todos.FindAsync(id);
 
     if(todo is null) return Results.NotFound();
@@ -42,7 +43,7 @@ app.MapPut("/todoitems/{id}",async (int id,Todo inputTodo,TodoDb db)=>{
 
 });
 
-app.MapDelete("/todoitems/{id}", async (int id, TodoDb db) =>
+todoitems.MapDelete("/{id}", async (int id, TodoDb db) =>
 {
     if(await db.Todos.FindAsync(id) is Todo todo)
     {
